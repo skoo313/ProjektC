@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -27,5 +28,15 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	
-	
+	UFUNCTION()
+	//--PORUSZANIE SIÊ--
+	// chodzenie
+	void MoveUpDown(float val);
+	void MoveRightLeft(float val);
+	// skakanie
+	void StartJump();
+	void StopJump();
+	// kucanie
+	void StartCrouch();
+	void StopCrouch();
 };

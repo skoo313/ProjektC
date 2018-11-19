@@ -8,6 +8,13 @@ AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Tworzy "camera component".
+	FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FPSCameraComponent->SetupAttachment(RootComponent);
+	// Pozycja kamery: oczy (trochê nad ale to na razie mo¿e zostaæ).
+	FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, BaseEyeHeight));
+
 }
 
 // Called when the game starts or when spawned

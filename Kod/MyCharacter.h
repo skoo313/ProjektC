@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
-#include "MyCharacter.generated.h"
+#include "Runtime/Engine/Classes/Camera/CameraComponent.h"
+#include "MyCharacter.generated.h" //to musi byæ na koñcu wszystkich #include
 
 UCLASS()
 class PROJEKTC_API AMyCharacter : public ACharacter
@@ -27,7 +28,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
 	UFUNCTION()
 	//--PORUSZANIE SIÊ--
 	// chodzenie
@@ -39,4 +39,9 @@ public:
 	// kucanie
 	void StartCrouch();
 	void StopCrouch();
+
+	// FPS camera.
+	UPROPERTY(VisibleAnywhere)
+	class UCameraComponent* FPSCameraComponent;
+
 };

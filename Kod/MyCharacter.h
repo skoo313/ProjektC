@@ -42,6 +42,10 @@ public:
 
 	// FPS camera.
 	UPROPERTY(VisibleAnywhere)
-	class UCameraComponent* FPSCameraComponent;
+	UCameraComponent* FPSCameraComponent;
+
+	// Ramiona (widoczne dla gracza)
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	USkeletalMeshComponent* FPSMesh;
 
 };

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MyCharacter.h"
 
@@ -10,11 +10,22 @@ AMyCharacter::AMyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Tworzy "camera component".
-	FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	FPSCameraComponent->SetupAttachment(RootComponent);
-	// Pozycja kamery: oczy (troch� nad ale to na razie mo�e zosta�).
-	FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, BaseEyeHeight));
+		FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+		FPSCameraComponent->SetupAttachment(RootComponent);
+		// Pozycja kamery: oczy (trochę nad ale to na razie może zostać).
+		FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f+BaseEyeHeight));
+		// Pozwala na poruszanie obrazem (jak tego nie ma to nie da sie patrzec góra-dół)
+		FPSCameraComponent->bUsePawnControlRotation = true;
 
+		// Tworzy mesha którego widzi gracz (tylko ramiona)
+		FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+		FPSMesh->SetOnlyOwnerSee(true);
+		// Attach the FPS mesh to the FPS camera.
+		FPSMesh->SetupAttachment(FPSCameraComponent);
+		// Wyłącza mesh ciała żeby widoczne były tylko rece
+		FPSMesh->bCastDynamicShadow = false;
+		FPSMesh->CastShadow = false;
+		GetMesh()->SetOwnerNoSee(true);
 }
 
 // Called when the game starts or when spawned
@@ -44,7 +55,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveUpDown", this, &AMyCharacter::MoveUpDown);
 	PlayerInputComponent->BindAxis("MoveRightLeft", this, &AMyCharacter::MoveRightLeft);
 
-	// Poruszanie kamer�
+	// Poruszanie kamerą
 	PlayerInputComponent->BindAxis("Turn", this, &AMyCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("Look", this, &AMyCharacter::AddControllerPitchInput);
 
@@ -59,7 +70,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AMyCharacter::MoveUpDown(float Value)
 {
-	// ,,znajduje" gdzie jest prz�d 
+	// ,,znajduje" gdzie jest przód 
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	AddMovementInput(Direction, Value);
 }

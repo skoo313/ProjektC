@@ -66,6 +66,9 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	// KUCANIE
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMyCharacter::StartCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMyCharacter::StopCrouch);
+
+	//STRZELANIE
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::Fire);
 }
 
 void AMyCharacter::MoveUpDown(float Value)
@@ -102,4 +105,38 @@ void AMyCharacter::StartCrouch()
 void AMyCharacter::StopCrouch()
 {
 	UnCrouch();
+}
+
+void AMyCharacter::Fire()
+{
+	// Attempt to fire a projectile.
+	if (ProjectileClass)
+	{
+		// pobiera polozenia kamery
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		// Ustawia kamere.
+		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+		FRotator MuzzleRotation = CameraRotation;
+		MuzzleRotation.Pitch += 10.0f;
+		
+		UWorld* World = GetWorld();
+		
+		if (World)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = Instigator;
+			// Spawnuje pocisk.
+			ABullet* Projectile = World->SpawnActor<ABullet>(ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams);
+			if (Projectile)
+			{
+				// Ustawia trajektoeie poczatkowa
+				FVector LaunchDirection = MuzzleRotation.Vector();
+				Projectile->FireDirection(LaunchDirection);
+			}
+		}
+	}
 }

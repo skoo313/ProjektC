@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
+#include "Bullet.h"
 #include "MyCharacter.generated.h" //to musi byæ na koñcu wszystkich #include
 
 UCLASS()
@@ -39,6 +40,8 @@ public:
 	// kucanie
 	void StartCrouch();
 	void StopCrouch();
+	
+	void Fire();
 
 	// FPS camera.
 	UPROPERTY(VisibleAnywhere)
@@ -48,4 +51,11 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* FPSMesh;
 
+	// Przesuwniecie punktu poczatkowego pocisku przed kamere.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector MuzzleOffset;
+
+	// pokazuje kategorie projectile w BP bohatera.
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class ABullet> ProjectileClass;
 };

@@ -8,6 +8,8 @@ ABullet::ABullet()
 {
 	// Use a sphere as a simple collision representation.
 	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	Collision->BodyInstance.SetCollisionProfileName(TEXT("Projectile"));
+	Collision->OnComponentHit.AddDynamic(this, &ABullet::OnHit);
 	// zasieg kolizji.
 	Collision->InitSphereRadius(15.0f);
 	// Set the root component to be the collision component.
@@ -21,6 +23,8 @@ ABullet::ABullet()
 	BulletMove->bRotationFollowsVelocity = true;
 	BulletMove->bShouldBounce = true;
 	BulletMove->Bounciness = 0.3f;
+	//czas ,,zycia" w [s]
+	InitialLifeSpan = 3.0f;
 
 }
 
@@ -42,4 +46,12 @@ void ABullet::Tick(float DeltaTime)
 void ABullet::FireDirection(const FVector& FireDirection)
 {
 	BulletMove->Velocity = FireDirection * BulletMove->InitialSpeed;
+}
+
+void ABullet::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
+	{
+		OtherComponent->AddImpulseAtLocation(BulletMove->Velocity * 100.0f, Hit.ImpactPoint);
+	}
 }

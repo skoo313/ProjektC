@@ -38,4 +38,6 @@ public:
 	// Funkcja odpowiadajaca za kierunek strzlu
 	void FireDirection(const FVector& FireDirection);
 	
+	// Funkcja wywo³ywana OnHit
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };
